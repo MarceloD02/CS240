@@ -1,25 +1,24 @@
 /******************************************************************************
-
-                        
+ Linked list. 
+/* 1. Create a linked list
+2. add data to it
+3. searching for data by index and by values
+4. removed data by index and by values 
+5. add data at the end of the linked list 
+6. add data and middle in specific index 
+7. add data at the beginning of the list 
+8. remove data at the end of my list 
+9. remove data at the beginning of the list 
+*/                    
 
 *******************************************************************************/
 
-// Linked list. 
-/* 1. create a linked list
-2. add data into it
-3. searching for data by index and by values
-4. removed data by index and by values 
-5. add data at the end of linked list 
-6. add data and midle in expeific index 
-7. add data at the begging of the list 
-8. remove data at the end of my list 
-9. remove data at the begging of the list 
-*/
+
 
 #include <stdio.h>
 #include <stdlib.h>
 # include <string.h>
-// first we create a struct data
+//First we create a struct data
 
  struct Node{
      char* data;
@@ -28,7 +27,7 @@
  };
  
 
- //  redefine a node -like copy to be used 
+ //  redefine a node-like copy to be used 
  
  typedef struct Node NODE;
  
