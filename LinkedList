@@ -1,0 +1,336 @@
+/******************************************************************************
+
+                        
+
+*******************************************************************************/
+
+// Linked list. 
+/* 1. create a linked list
+2. add data into it
+3. searching for data by index and by values
+4. removed data by index and by values 
+5. add data at the end of linked list 
+6. add data and midle in expeific index 
+7. add data at the begging of the list 
+8. remove data at the end of my list 
+9. remove data at the begging of the list 
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+# include <string.h>
+// first we create a struct data
+
+ struct Node{
+     char* data;
+     int pos;
+     struct Node* next; 
+ };
+ 
+
+ //  redefine a node -like copy to be used 
+ 
+ typedef struct Node NODE;
+ 
+ // create a node ;
+ 
+/* NODE* createNode(char* head, int val){
+     NODE* newNode= malloc(sizeof(NODE));
+     newNode->data=head;
+     newNode-> pos=val;
+     newNode->next=NULL;
+     return newNode; 
+ } */
+ 
+ // image if we are working with string we should remember the /0 and so on. 
+ // lets create a node 
+ 
+ NODE* createNode(char* head, int val){
+     // create and allocate memore
+     NODE* newNode=malloc(sizeof(NODE));
+     if(newNode==NULL){
+         printf("memory fail");
+         exit(1);
+     }
+     
+     // allocate the memore for the new nodes
+     newNode->data=malloc(strlen(head)+1);
+     if(newNode==NULL){
+         printf(" memory fail");
+         // free new node
+         
+         free(newNode);
+         exit(1);
+     }
+     // if is not null we copy the new string head and put it in the data
+     
+     strcpy(newNode->data, head);
+     
+     newNode->pos=val;
+     newNode->next=NULL;
+     
+     return newNode;
+ }
+  // add node in my linked list
+ 
+ NODE* addNodeFront(NODE** adress_of, char* data, int index){
+     // first create a node
+     NODE* newNode=createNode(data,index);
+     // point the new node to my head 
+     newNode->next=*adress_of;
+     *adress_of=newNode;
+     return newNode;
+ }
+     
+ 
+ // print the nodes created 
+ 
+ /*void printNode(NODE* NodeIn){
+     if(NodeIn==NULL){
+         printf(" no node in the list");
+         return;
+     }
+     printf("data :%s post : %d\n",NodeIn->data, NodeIn->pos);
+ } */
+     
+ 
+ // add node at the end of my linked list;
+ NODE* AddToEnd(NODE** addressEnd, char* data, int index){
+     
+     // create a new node  
+     
+     NODE* nodeEnd=createNode(data, index);
+     if (nodeEnd==NULL){
+         printf("memory fail");
+         exit(1);
+     }
+     // check if the list is empyt
+     if(*addressEnd==NULL){
+         
+         *addressEnd=nodeEnd;
+     }
+     else {
+         // in case that this addressEnd is not null, meaning that we have some nodes before reach to the end
+         NODE* current=*addressEnd;
+         while(current->next!=NULL){
+             current=current->next;
+         }
+         
+         current->next=nodeEnd;
+     }
+     return nodeEnd;
+ }
+ 
+  // you should change your print list 
+ 
+ void printNode(NODE* NodeIn){
+      if(NodeIn==NULL){
+         printf(" no node in the list");
+         return;
+     }
+     NODE* current =  NodeIn;
+     while (current != NULL) {
+        printf("Data: %s, Position: %d\n", current->data, current->pos);
+        current = current->next;
+    }
+        
+ }
+ // seach for Carlo in the linked list
+ 
+ // to seach for any data in the linked list, we check first if we have carlo in the list, if yes pint if 
+ 
+ NODE* seacherNode_by_index(NODE* node, int index){
+     
+     if (node==NULL){
+         printf("No node find");
+     }
+     int count=0;
+     NODE* current=node; 
+     
+     while(current!=NULL){
+         if(count==index){
+             return current;
+         }
+         current=current->next;
+         count++;
+     }
+     // If the desired index is not found, print a message and return NULL
+    printf("Node at index %d not found.\n", index);
+    return NULL;
+ }
+ 
+ 
+ // add Node in any position, let say position 3  
+ 
+ NODE* addNodeEnyPosition(NODE** address_of, char* data, int position){
+     
+     // first create a node
+     
+     NODE* nodePosition= createNode(data, position); 
+     
+     // check if I have node in my list 
+     
+     if(nodePosition==NULL){
+         printf("memory fail");
+         exit(1);
+     }
+     // lets say i want put this node between index 2 and 3 
+     
+     if(position==1){
+         nodePosition->next=*address_of;
+         
+         *address_of=nodePosition;
+         return nodePosition;
+     }
+     
+     NODE* current=*address_of;
+     int count=1;
+     
+     while(current!=NULL && count<position-1){
+         current=current->next;
+         count++;
+         
+     }
+     nodePosition->next = current->next;
+    current->next = nodePosition;
+
+    return nodePosition;
+     
+ }
+ 
+ // how to remove node and begining ;
+ 
+ // to remove at the begging we point the address to the next node
+ 
+ void removeFrontNode(NODE** address_of){
+     if(address_of==NULL){
+         printf("No not in the list");
+         return;
+     }
+     
+     // create a temp node and point it to the address of head   
+     
+     NODE* temp= *address_of;
+     * address_of=(*address_of)->next;
+     
+     free(temp);
+ }
+ 
+ // remove to the end of my list 
+ 
+ void RemoveEndNode(NODE** address_of){
+     
+     if(address_of==NULL){
+         printf("No node in the list");
+         return;
+     }
+     // how to go to the end of my list
+     
+     NODE* current=*address_of; 
+     
+     NODE* prev=NULL;
+     
+     while(current->next!=NULL){
+         
+         prev=current;
+         current=current->next;
+         
+     }
+     
+     if (prev!=NULL){
+         prev->next=NULL;
+     }
+     else{
+         *address_of=NULL;
+     }
+     
+     free(current->data);
+     free(current);
+     
+ }
+ 
+ 
+ // how to remove in any postion 
+ 
+ void removeAnyPosition(NODE** address_of, int index){
+     if(address_of==NULL){
+         printf("No node in the list");
+         return;
+     }
+     NODE* current=*address_of;
+     NODE* prev=NULL;
+     
+     int postion =1;
+     
+     while(current!=NULL && postion<index){
+         prev=current;
+         current=current->next; 
+         postion++;
+     }
+     if(current==NULL){
+         printf("position out");
+         return;
+     }
+     else{
+         if(prev!=NULL){
+             prev->next=current->next;
+         }
+         else{
+             * address_of=current->next;
+         }
+     }
+     free(current->data);
+     free(current);
+     
+     
+ }
+
+ 
+
+int main() {
+    // create a node 
+    NODE* head = NULL;
+    // add new node to head
+    head = createNode("Hello", 1);
+    // create a second node  
+    NODE* second_node = createNode("Markes", 2);
+    NODE* third_node = createNode("John", 3);
+    NODE* forht_node = createNode("Carlo", 4);
+    NODE* fith_node = createNode("Jajn", 5);
+    NODE* sexth_node = createNode("John", 6);
+    
+    // connect the nodes
+    head->next = second_node;
+    second_node->next = third_node;
+    third_node->next = forht_node;
+    forht_node->next = fith_node;
+    fith_node->next = sexth_node;
+    
+    // add the node at the front
+    addNodeFront(&head, "me", 7);
+    
+    // add node to the end by calling my function
+    AddToEnd (&head,"googh",8);
+    
+    // add new node ate postion 3 
+    addNodeEnyPosition(&head, "new_data", 3); // Insert "new_data" at position 3
+    
+    // remove first node by calling the removeFrontNode function
+    
+   removeFrontNode(&head);
+   
+   // remove end of the list 
+   
+   RemoveEndNode(&head);
+   
+   // remove any postion by call removeAnyPosition method
+   
+   //removeAnyPosition(&head, 2);
+   
+    removeAnyPosition(&head, 2);
+    
+    // Print the list after adding the new node
+    printNode(head);
+
+    return 0;
+}
